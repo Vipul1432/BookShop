@@ -8,6 +8,9 @@ using System.Threading.Tasks;
 using System.Xml.Linq;
 using System.Runtime.InteropServices;
 using System.Web.Mvc;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.ModelBinding;
+using Microsoft.AspNetCore.Mvc.ModelBinding.Validation;
 
 namespace BookShop.Domain.Models
 {
@@ -45,7 +48,9 @@ namespace BookShop.Domain.Models
 
         public int CategoryId { get; set; }
         [ForeignKey("CategoryId")]
+        [ValidateNever]
         public Category Category { get; set; }
+        [ValidateNever]
         public string? Image { get; set; }
 
     }

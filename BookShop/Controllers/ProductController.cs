@@ -48,8 +48,8 @@ namespace BookShop.Controllers
         {
             try
             {
-                //if (ModelState.IsValid)
-                //{
+                if (ModelState.IsValid)
+                {
                     if (imageFile != null && imageFile.Length > 0)
                     {
                         // Generate a unique filename for the uploaded image
@@ -80,9 +80,9 @@ namespace BookShop.Controllers
                     if (result > 0)
                         TempData["success"] = $"Category {product.Title} Added Successfully";
                     return RedirectToAction(nameof(Index));
-                //}
-                //return View(product);
             }
+                return View(product);
+        }
             catch
             {
                 return View();
@@ -135,5 +135,13 @@ namespace BookShop.Controllers
             bool IsDeleted = await _productRepository.DeleteProductAsync(id);
             return RedirectToAction("Index");
         }
+
+        #region Api Call
+        public async Task<IActionResult> GetAll()
+        {
+            IEnumerable<Product> products = await _productRepository.GetAllProductsAsync();
+            return Json(new { data = products });
+        }
+        #endregion Api Call
     }
 }
