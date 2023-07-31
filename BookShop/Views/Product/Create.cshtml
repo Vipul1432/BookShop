@@ -1,0 +1,114 @@
+﻿@model BookShop.Domain.Models.Product
+
+@{
+    ViewData["Title"] = "Create";
+}
+
+<h3>Add Product</h3>
+<hr class="w-25" />
+<div class="row mb-5">
+    <div class="col-md-4 mb-5">
+        <form asp-action="Create" enctype="multipart/form-data">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <div class="form-group">
+                <label asp-for="Title" class="control-label required"></label>
+                <input asp-for="Title" class="form-control" />
+                <span asp-validation-for="Title" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Description" class="control-label required"></label>
+                <textarea asp-for="Description" class="form-control"></textarea>
+                <span asp-validation-for="Description" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="ISBN" class="control-label required"></label>
+                <input asp-for="ISBN" class="form-control" />
+                <span asp-validation-for="ISBN" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Author" class="control-label required"></label>
+                <input asp-for="Author" class="form-control" />
+                <span asp-validation-for="Author" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="ListPrice" class="control-label required"></label>
+                <input asp-for="ListPrice" class="form-control" />
+                <span asp-validation-for="ListPrice" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Price" class="control-label required"></label>
+                <input asp-for="Price" class="form-control" />
+                <span asp-validation-for="Price" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Price50" class="control-label required"></label>
+                <input asp-for="Price50" class="form-control" />
+                <span asp-validation-for="Price50" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Price100" class="control-label required"></label>
+                <input asp-for="Price100" class="form-control" />
+                <span asp-validation-for="Price100" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="CategoryId" class="control-label required"></label>
+                <select asp-for="CategoryId" asp-items="@ViewBag.CategoryList" class="form-select">
+                    <option disabled selected>--Select Category--</option>
+                </select>
+                <span asp-validation-for="CategoryId" class="text-danger"></span>
+            </div> 
+            <div class="form-group">
+                <label asp-for="Image" class="control-label required">Upload Image</label>
+                <input asp-for="Image" type="file" class="form-control" id="imageInput" name="imageFile" />
+                <img id="imagePreview" src="#" alt="Selected Image" style="display: none; max-width: 300px;" />
+            </div>
+            <div class="form-group">
+                <input type="submit" value="Create" class="btn btn-sm mt-3 btn-primary" />
+                <a asp-action="Index" class="btn btn-sm btn-success mt-3 ms-2">Back to List</a>
+            </div>
+        </form>
+    </div>
+</div>
+
+
+@section Scripts {
+    <script>
+        tinymce.init({
+            selector: 'textarea',
+            plugins: 'ai tinycomments mentions anchor autolink charmap codesample emoticons image link lists media searchreplace table visualblocks wordcount checklist mediaembed casechange export formatpainter pageembed permanentpen footnotes advtemplate advtable advcode editimage tableofcontents mergetags powerpaste tinymcespellchecker autocorrect a11ychecker typography inlinecss',
+            toolbar: 'undo redo | blocks fontfamily fontsize | bold italic underline strikethrough | link image media table mergetags | align lineheight | tinycomments | checklist numlist bullist indent outdent | emoticons charmap | removeformat',
+            tinycomments_mode: 'embedded',
+            tinycomments_author: 'Author name',
+            mergetags_list: [
+                { value: 'First.Name', title: 'First Name' },
+                { value: 'Email', title: 'Email' },
+            ],
+            ai_request: (request, respondWith) => respondWith.string(() => Promise.reject("See docs to implement AI Assistant"))
+        });
+
+        document.getElementById('imageInput').addEventListener('change', function (event) {
+            var fileInput = event.target;
+            var imagePreview = document.getElementById('imagePreview');
+
+            // Check if a file was selected
+            if (fileInput.files && fileInput.files[0]) {
+                var reader = new FileReader();
+
+                // Set up the FileReader's onload event to display the image
+                reader.onload = function (e) {
+                    imagePreview.src = e.target.result;
+                    imagePreview.style.display = 'block'; // Show the image preview
+                };
+
+                // Read the file as a data URL (base64 encoded)
+                reader.readAsDataURL(fileInput.files[0]);
+            } else {
+                // If no file was selected, hide the image preview
+                imagePreview.src = '#';
+                imagePreview.style.display = 'none';
+            }
+        });
+    </script>
+
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}
